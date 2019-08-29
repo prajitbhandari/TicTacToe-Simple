@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<style type="text/css">
+		.game-buttons li {
+			list-style: none;
+			float: left;
+			display: inline-block;
+			margin-right:2px;
+			position: relative;
+			left:40%;
+			height: 20px;
+			width: 100px;
+		}
+	</style>
+	<script type="text/javascript">
+		var x="X";
+		var o="0";
+		var current_player="";
+		var opponent_player="";
+		var counter=1;
+		
+
+		var board = [["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			];
+		
+		// console.log("The length of Default board is "+board.length); 
+
+		function resetGame()
+
+		{
+			document.getElementById('result').innerHTML= "";
+			var p=document.getElementsByClassName('gameClick');
+			console.log(p);
+
+			 for (var x=0;x<p.length;x++){
+			   p[x].innerHTML= "";
+			 }
+			document.getElementById('game-table').style.visibility = 'hidden';
+			document.getElementById('radio-form').style.visibility = 'visible';
+			document.getElementById('playerX').checked = false;
+			document.getElementById('player0').checked = false;
+			board = [["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			];
+		   	current_player="";
+			opponent_player="";
+			counter=1;
+
+		} 
+
+		function result(player)
+		{
+
+			document.getElementById('result').innerHTML= 'Player'+ " "+ player +" " +'wins';
+			var p=document.getElementsByClassName('gameClick');
+			console.log(p);
+
+			 for (var x=0;x<p.length;x++){
+			   p[x].innerHTML= "";
+			 }
+			document.getElementById('game-table').style.visibility = 'visible';
+			board = [["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			["",""],["",""],["",""],
+		   			];
+		   	document.getElementById('playerX').checked = false;
+			document.getElementById('player0').checked = false;
+		} 
+
+
+		function playerCheck(e){
+			// var $this=$(this);
+			// debugger
+			// e.style.visibility = 'hidden';
+				document.getElementById('radio-form').style.visibility = 'hidden';
+				document.getElementById('game-table').style.visibility = 'visible';
+			 	
+			 	if(e.id=="playerX"){
+			 		document.getElementById('player-info').innerHTML = "You are Player :"+x;
+			 		document.getElementById('player-turn').innerHTML="Now Player"+" "+ "X" +" "+ "Turn";
+			 		current_player="X";
+					opponent_player="0";	
+			 	}else{
+			 		document.getElementById('player-info').innerHTML = "You are Player :"+o;
+			 		document.getElementById('player-turn').innerHTML="Now Player"+" " + "0" + " " + "Turn";
+			 		current_player="0";
+					opponent_player="X";
+			 	}
+			 		
+			}
+
+
+		function gameCheck(e){
+
+			if(current_player=="X"){
+					if(counter%2!=0){
+						e.innerHTML=current_player;
+						document.getElementById('player-turn').innerHTML="Next =>"+"Player"+ " "+opponent_player +" "+ "Turn";
+					}else{
+					e.innerHTML=opponent_player;
+					document.getElementById('player-turn').innerHTML="Next =>"+"Player"+ " "+ current_player +" "+ "Turn";
+				}	
+			}else if(current_player=="0"){
+					if(counter%2!=0){
+					e.innerHTML=current_player;
+					document.getElementById('player-turn').innerHTML="Next =>"+"Player"+ " "+opponent_player +" "+ "Turn";
+				}else{
+					e.innerHTML=opponent_player;
+					document.getElementById('player-turn').innerHTML="Next =>"+"Player"+ " "+ current_player +" "+ "Turn";
+				}	
+			}
+			
+			    
+		    let xPos=e.getAttribute('data-x');
+		    let yPos=e.getAttribute('data-y');
+		    board[xPos][yPos]= e.innerHTML;
+		
+		    checkDiagonal(board);
+		    checkRow(board);
+		    checkColumn(board);
+
+		    checkDraw(board,counter);
+
+		    counter=counter+1;   	  		   		 
+		}
+
+
+		function checkDiagonal(board){  
+			let lcount=1;
+			let rcount=1;
+			for(let i=0;i<2;i++){
+				for(let j=0;j<2;j++){
+
+					if(i==j){
+
+							if((board[i][j]==board[i+1][j+1])){
+								lcount=lcount+1;
+								// console.log(count);
+								if(lcount==3){
+									result(board[i][j]);
+									return true;
+								}	
+							}
+						
+					}		
+					
+				}												
+			}
+
+			for(let x=0;x<3;x++){
+				for(y=0;y<3;y++){
+					if(x+y==2){
+						console.log(x+y);
+						console.log("Ok done");
+							if((board[x][y]==board[x+1][y-1])){
+								rcount=rcount+1;
+								// console.log(count);
+								if(rcount==3){
+									result(board[x][y]);
+									return true;
+									break;
+								}	
+							}
+					}
+				}
+			}
+
+			
+		}		
+		
+
+		function checkRow(board){
+			let xcount=1;
+			let ycount=1;
+			// let zcount=1;
+			for(let i=0;i<3;i++){
+				for(let j=0;j<2;j++){
+					if(i<3 && j<2){
+						// console.log("I ko value"+i+ " " +"J ko value"+j);
+
+						 
+						if((board[i][j]=="X" && board[i][j+1]=="X")){  
+							    
+								xcount=xcount+1;
+								console.log("Vlue of xcount is"+xcount);
+								if(xcount==3){
+									result(board[i][j]);
+									return true;	
+									break;
+								}
+							}else if((board[i][j]=="0" && board[i][j+1]=="0")){  
+							    
+								ycount=ycount+1;
+								console.log("Vlue of xcount is"+ycount);
+								if(ycount==3){
+									result(board[i][j]);
+									return true;	
+									break;
+								}
+							}
+
+						
+					}												
+			
+			}
+
+		}
+	}
+			
+
+		function checkColumn(board){
+			let xcount=1;
+			let ycount=1;
+			// let zcount=1;
+			for(let i=0;i<3;i++){
+				for(let j=0;j<3;j++){
+					if(i<3 && j<=2){
+						// console.log("I ko value"+i+ " " +"J ko value"+j);
+
+						 
+						if((board[i][j]=="X" && board[i+1][j]=="X")){  
+							    
+								xcount=xcount+1;
+								console.log("Vlue of xcount is"+xcount);
+								if(xcount==3){
+									result(board[i][j]);
+									return true;	
+									break;
+								}
+							}else if((board[i][j]=="0" && board[i+1][j]=="0")){  
+							    
+								ycount=ycount+1;
+								console.log("Vlue of xcount is"+ycount);
+								if(ycount==3){
+									result(board[i][j]);
+									return true;	
+									break;
+								}
+							}
+
+						
+					}												
+			
+				}
+
+			}
+		}
+
+
+		function checkDraw(board,counter){
+			if(counter==9){
+				if(checkDiagonal(board)!=true ||checkRow(board)!=true ||checkColumn(board)!=true){
+					alert("Game is Tied");
+				}
+			}
+
+		}
+	</script>
+
+	
+</head>
+<body>
+	<div class="wrapper" style="margin: 0 auto;">
+		<h3 style="text-align: center;padding-top:50px;">Welcome to Tic Tac Toe Game</h3>
+		<h4 style="text-align: center;">Would you like to be X or 0?</h4>
+		<form name="" action="" style="text-align: center;" id="radio-form">
+			X<input type="radio" name="X" id="playerX" onclick="playerCheck(this)" value="X">
+			0<input type="radio" name="0" id="player0" onclick="playerCheck(this)" value="0">
+			
+		</form>
+	</div>
+
+	<p  id="result" style="text-align: center;"></p>	
+	
+	<div id="game-table" style="visibility: hidden;">
+		<table align='center'border="2px" cellspacing="0" cellpadding="40" style="margin-top:50px;"><br><br>
+		<caption id="player-info">You are Player: </caption><br>
+		<caption id="player-turn">Player  Turn: </caption><br>
+			<div class="game-buttons">
+				<ul>
+					<!-- <li><span style="background-color: yellow";>Your Turn </span></li> -->
+					<li><button  id="game-reset" onclick="resetGame()">Reset</button></li>
+<!-- 					<li><span style="background-color: red";>Computer Turn</span></li>
+ -->				</ul>
+			</div>
+		<tr>
+			<td id="one" class="gameClick" data-x=0 data-y=0 onclick="gameCheck(this)"></td>
+			<td id="two"  class= "gameClick" data-x=0 data-y=1 onclick="gameCheck(this)"></td>
+			<td id="three"  class= "gameClick" data-x=0 data-y=2 onclick="gameCheck(this)"></td>
+		</tr>
+		<tr>
+			<td id="four" class= "gameClick" data-x=1 data-y=0 onclick="gameCheck(this)"></td>
+			<td id="five"  class= "gameClick" data-x=1 data-y=1 onclick="gameCheck(this)"></td>
+			<td id="six"  class= "gameClick" data-x=1 data-y=2 onclick="gameCheck(this)"></td>
+		</tr>
+		<tr>
+			<td id="seven" class= "gameClick" data-x=2 data-y=0 onclick="gameCheck(this)"></td>
+			<td id="eight" class= "gameClick" data-x=2 data-y=1 onclick="gameCheck(this)"></td>
+			<td id="nine" class= "gameClick" data-x=2 data-y=2 onclick="gameCheck(this)"></td>
+		</tr>
+	</table>
+	</div>
+
+</body>
+</html>
